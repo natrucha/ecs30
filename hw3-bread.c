@@ -1,9 +1,18 @@
 #include<stdio.h>
 
+/*********************** REQUIREMENTS ***********************/
+
+// have to create a calc_bake_time function and a display_instructions function
+// trying to minimize the amount of if statments in the calc_baking_time function to below four
+
+/*********************** PROGRESS ***********************/
+
+// First user choice does change between white and sweet bread
+// for some reason scanf is reading the [return] key stroke as one of the choices
+
 /*********************** PRINT ***********************/
 
-void display_instructions(char manual, int p_kneading, int p_rising, int s_kneading, int s_rising, int loaf_shaping, int f_rising, int baking, int cooling, int baking_time_min, int baking_time_sec){
-  int bake_sec = 0; // because doubling the loaf is an added pain
+void display_instructions(char manual, int bake_sec, int p_kneading, int p_rising, int s_kneading, int s_rising, int loaf_shaping, int f_rising, int baking, int cooling, int baking_time_min, int baking_time_sec){
 
   // print the stuff that gets printed no matter what
   printf("Primary kneading: %d minutes\n", p_kneading);
@@ -12,12 +21,6 @@ void display_instructions(char manual, int p_kneading, int p_rising, int s_knead
   printf("Secondary rising: %d minutes\n", s_rising);
   printf("Loaf shaping: %d seconds\n", loaf_shaping);
 
-  // bakng time seconds are dumb
-  if (baking_time_sec < 3){
-    // if the amount of seconds is larger than 2, then the loaf is a double and baking time has 30 added seconds
-    bake_sec = 30;
-  }
-
   if (manual == 'y' || manual == 'Y') {
     // if manual, stop there, add instructions to take it out
     printf("You should remove the dough for manual baking.\n\n");
@@ -25,7 +28,7 @@ void display_instructions(char manual, int p_kneading, int p_rising, int s_knead
     // if the user did not choose manual, print everything else
     printf("Final rising: %d minutes\n", f_rising);
     printf("Baking: %d minutes %d seconds\n", baking, bake_sec);
-    printf("Cooling: %d minutes\n", cooling);
+    printf("Cooling: %d minutes\n\n", cooling);
   }
   // print total baking time
   printf("For a total baking time of %d minutes and %d seconds.\n", baking_time_min, baking_time_sec);
@@ -45,6 +48,7 @@ void calc_baking_time(char bread_type, char loaf_type, char manual) {
   int cooling = 30; // time to cool in minutes
 
   int baking_time_min; // total baking time minutes
+  int bake_sec = 0; // baking time in seconds
   int baking_time_sec = 0; // total baking time seconds
 
   // if sweet bread desired
@@ -60,7 +64,7 @@ void calc_baking_time(char bread_type, char loaf_type, char manual) {
   if (loaf_type == 'd' || loaf_type == 'D') {
     // increase the baking time by 50%
     baking = baking * 1.5;
-    baking_time_sec = 30; // because I'm keeping everything as an int and the seconds go poof
+    bake_sec = 30; // because I'm keeping everything as an int and the seconds go poof
   }
 
   baking_time_min = p_kneading + p_rising + s_kneading + s_rising;
@@ -70,10 +74,10 @@ void calc_baking_time(char bread_type, char loaf_type, char manual) {
   }
 
   // finish adding in the loaf shaping seconds to the total seconds
-  baking_time_sec = baking_time_sec + loaf_shaping;
+  baking_time_sec = bake_sec + loaf_shaping;
 
   // call the display instructions function
-  display_instructions(manual, p_kneading, p_rising, s_kneading, s_rising, loaf_shaping, f_rising, baking, cooling, baking_time_min, baking_time_sec);
+  display_instructions(manual, bake_sec, p_kneading, p_rising, s_kneading, s_rising, loaf_shaping, f_rising, baking, cooling, baking_time_min, baking_time_sec);
   //return 0;
 }
 
@@ -88,12 +92,12 @@ int main(int argc, char const *argv[]) {
   printf("Are you making white or sweet bread (w or s)? ");
   scanf("%c", &bread_type);
   printf("Is this a single or double loaf (s or d)? ");
-  scanf("%c", &loaf_type);
+  scanf(" %c", &loaf_type);
   printf("Are you going to bake manually (y or n)? ");
-  scanf("%c", &manual);
+  scanf(" %c", &manual);
 
   // debugging
-  printf("%c %c %c\n", bread_type, loaf_type, manual);
+  //printf("%c %c %c\n", bread_type, loaf_type, manual);
 
   calc_baking_time(bread_type, loaf_type, manual);
 
