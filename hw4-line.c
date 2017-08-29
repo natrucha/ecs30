@@ -10,6 +10,16 @@ void get_pt_slope( double *m, // slope
                   int *x, int *y // point coordinates
                 );
 
+void slope_intcpt_from2_pt(int x1, int y1, // first point coordinates
+                           int x2, int y2, // second point coordinates
+                           double *m, // slope
+                           double *b // y-intercept
+                         );
+
+double intcpt_from_pt_slope(int x, int y, double m);
+
+void display2_pt(int x1, int y1, int x2, int y2);
+
 
 int main(int argc, char const *argv[]) {
   // this is a pain in the butt....
@@ -47,18 +57,23 @@ int main(int argc, char const *argv[]) {
   }
 
   if (conv_form == 1) {
-    slope = (double) (y_coor_1 - y_coor) / (x_coor_1 - x_coor);
-    b = (double) (-x_coor * slope) + y_coor;
+    slope_intcpt_from2_pt(x_coor, y_coor, x_coor_1, y_coor_1, &slope, &b);
+    /*slope = (double) (y_coor_1 - y_coor) / (x_coor_1 - x_coor);
+    b = (double) (-x_coor * slope) + y_coor;*/
 
+    display2_pt(x_coor, y_coor, x_coor_1, y_coor_1);
+    /*
     printf("\nTwo-point form\n");
     printf("      (%.2lf- %.2lf)\n", (double) y_coor_1, (double) y_coor);
     printf("  m = -------------\n");
     printf("      (%.2lf - %.2lf)\n\n", (double) x_coor_1, (double) x_coor);
+    */
     printf("Slope-intercept form\n");
     printf("  y = %.2lfx + %.2lf\n", slope, b);
 
   } else if (conv_form == 2) {
-    b = (double) (-x_coor * slope) + y_coor;
+    b = intcpt_from_pt_slope(x_coor, y_coor, slope);
+    //b = (double) (-x_coor * slope) + y_coor;
 
     printf("\nPoint-slope form\n");
     printf("  y - %.2lf = %.2lf(x - %.2lf)\n\n", (double) y_coor, slope, (double) x_coor);
@@ -101,3 +116,32 @@ void get_pt_slope( double *m, // slope
   printf("Enter the x-y coordinates of the point separated by a space=> ");
   scanf("%d %d", x, y);
 }
+
+void slope_intcpt_from2_pt(int x1, int y1, // first point coordinates
+                           int x2, int y2, // second point coordinates
+                           double *m, // slope
+                           double *y_int // y-intercept
+                           ){
+  // calculates the slope using the coordinates of the two points
+  *m = (double) (y2 - y1) / (x2 - x1);
+  // calculates the y-intercept using the calculated slope and the first point
+  *y_int = (double) (-x1 * *m) + y1;
+
+}
+
+double intcpt_from_pt_slope(int x, int y, double m){
+  double y_int;
+  // calculate the y-intercept from a slope and the coordinates of a point
+  y_int = (double) (-x * m) + y;
+
+  return y_int;
+}
+
+void display2_pt(int x1, int y1, int x2, int y2){
+   // takes the four coordinates of submitted two points
+   // displayes a two-point line equation with a heading
+   printf("\nTwo-point form\n");
+   printf("      (%.2lf- %.2lf)\n", (double) y2, (double) y1);
+   printf("  m = -------------\n");
+   printf("      (%.2lf - %.2lf)\n\n", (double) x2, (double) x1);
+ }
