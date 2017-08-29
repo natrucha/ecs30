@@ -20,6 +20,10 @@ double intcpt_from_pt_slope(int x, int y, double m);
 
 void display2_pt(int x1, int y1, int x2, int y2);
 
+void display_pt_slope(int x, int y, double m);
+
+void display_slope_intcpt (double m, double y_int);
+
 
 int main(int argc, char const *argv[]) {
   // this is a pain in the butt....
@@ -68,17 +72,26 @@ int main(int argc, char const *argv[]) {
     printf("  m = -------------\n");
     printf("      (%.2lf - %.2lf)\n\n", (double) x_coor_1, (double) x_coor);
     */
+    display_slope_intcpt (slope, b);
+    /*
     printf("Slope-intercept form\n");
     printf("  y = %.2lfx + %.2lf\n", slope, b);
+    */
 
   } else if (conv_form == 2) {
     b = intcpt_from_pt_slope(x_coor, y_coor, slope);
     //b = (double) (-x_coor * slope) + y_coor;
 
+    display_pt_slope(x_coor, y_coor, slope);
+    /*
     printf("\nPoint-slope form\n");
     printf("  y - %.2lf = %.2lf(x - %.2lf)\n\n", (double) y_coor, slope, (double) x_coor);
+    */
+    display_slope_intcpt (slope, b);
+    /*
     printf("Slope-intercept form\n");
     printf("  y = %.2lfx + %.2lf\n", slope, b);
+    */
 
   }
 
@@ -145,3 +158,19 @@ void display2_pt(int x1, int y1, int x2, int y2){
    printf("  m = -------------\n");
    printf("      (%.2lf - %.2lf)\n\n", (double) x2, (double) x1);
  }
+
+void display_pt_slope(int x, int y, double m){
+   printf("\nPoint-slope form\n");
+   printf("  y - %.2lf = %.2lf(x - %.2lf)\n\n", (double) y, m, (double) x);
+ }
+
+void display_slope_intcpt (double m, double y_int){
+  if (y_int < 0){
+    y_int = -y_int;
+    printf("Slope-intercept form\n");
+    printf("  y = %.2lfx - %.2lf\n", m, y_int);
+  } else {
+    printf("Slope-intercept form\n");
+    printf("  y = %.2lfx + %.2lf\n", m, y_int);
+  }
+}
